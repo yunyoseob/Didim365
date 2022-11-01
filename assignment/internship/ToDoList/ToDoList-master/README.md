@@ -14,7 +14,7 @@
 
 ## Code
 
-**✔ [todoList.html](https://github.com/Yun-Yoseob/ToDoList/blob/master/todoList.html)**
+**✔ [todoList.html](https://github.com/yunyoseob/RedWoodK/blob/master/assignment/internship/ToDoList/ToDoList-master/todoList.html)**
 
 **✔ todoList.html 전체 코드**
 
