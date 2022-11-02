@@ -11,20 +11,10 @@
 
 ## 가상환경 세팅
 
-**✔ [Virtual Box](https://www.virtualbox.org/)**
+**✔ 참고자료**
 
-- Windows hosts로 설치
+1. [카프카(Kafka) - 카프카 클러스터 설치](https://hoing.io/archives/4269#OS)
 
-**✔ [Download Ubuntu](https://ubuntu.com/download/desktop)**
+2. [Kafka 클러스터 환경 구축 - 3강. Zookeeper 설치 및 환경설정](https://www.youtube.com/watch?v=2bNEKDx-5Rg&t=209s)
 
-- Ubuntu 22.04.1 LTS Download
-
-1. VirtualBox.exe 실행
-
-2. Oracle VM VirtualBox 관리자에서 새로만들기 버튼을 눌러 가상 머신 만들기
-
-3. 다 만들었으면, 설정 ➡ 저장소 ➡ 가상 광학 디스크 선택/만들기 ➡ 다운 받았던 ubuntu-22.04.1-desktop-amd64.iso 열기
-
-4. Oracle VM VirtualBox 관리자에서 시작버튼 눌러 Install Ubuntu 버튼 클릭
-
-## 가상환경에서 Java 설치 및 환경변수 설정
+3. [Kafka 실습 (1) - 환경 설정](https://jeffrey-oh.tistory.com/358)
