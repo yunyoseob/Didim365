@@ -1,6 +1,6 @@
 # Kafka 과제
 
-## Linux Setting(가상환경)
+## Ver1. Window에서 VMWare를 사용하여 Linux Setting(가상환경)
 
 **✔ 참고자료**
 
@@ -9,3 +9,6 @@
 2. [카프카(Kafka) - 카프카 클러스터 설치](https://hoing.io/archives/4269#OS)
 
 3. [Kafka 클러스터 환경 구축 - 3강. Zookeeper 설치 및 환경설정](https://www.youtube.com/watch?v=2bNEKDx-5Rg&t=209s)
+
+
+## Amazon Linux로 Setting
