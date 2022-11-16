@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kafka Topiic & Send Message</title>
+    <style type="text/css">
+        #divId {
+            border: black 1px solid;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // console.log("Ajax 부를 준비 완료");
+            $('#createTopicbtn').click(function () {
+                var topicName = $('#topicName').val();
+                var partitionNum = $('#partitionNum').val();
+                var replicationNum = $('#replicationNum').val();
+                $.ajax({
+                    url: "/create/topic",
+                    type: "GET",
+                    data: {
+                        topicName: topicName,
+                        partitionNum: partitionNum,
+                        replicationNum: replicationNum
+                    },
+                    success: callBack,
+                });
+
+                function callBack(result) {
+                    alert("성공 >>> : " + result);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<h2 style="text-align: center">Kafka Topic 생성 및 Message 보내기</h2>
+
+<hr>
+
+<div id="divId">
+    <p>&nbsp; - Topic 생성</p>
+    <form id="formId">
+        <table>
+            <tr>
+                <td>Topic :</td>
+                &nbsp;
+                <td><input type="text" id="topicName" , name="topicName"></td>
+                &nbsp;
+                <td>Partition :</td>
+                &nbsp;
+                <td><input type="text" id="partitionNum" , name="partitionNum"></td>
+                &nbsp;
+                <td>Replication :</td>
+                &nbsp;
+                <td><input type="text" id="replicationNum" , name="replicationNum"></td>
+                &nbsp;
+                <td>
+                    <button id="createTopicbtn">생성하기</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
