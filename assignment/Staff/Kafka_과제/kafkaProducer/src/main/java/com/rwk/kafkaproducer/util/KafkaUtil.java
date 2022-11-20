@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -36,6 +37,20 @@ public class KafkaUtil {
             properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
             adminClient = AdminClient.create(properties);
         }
+
+        if (kafkaTemplate == null) {
+            HashMap<String, Object> configProps = new HashMap<String, Object>();
+
+            configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+            configProps.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 30000);
+            configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+            configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+            ProducerFactory<String, String> factory = new DefaultKafkaProducerFactory<>(configProps);
+
+            kafkaTemplate = new KafkaTemplate<>(factory);
+        }
+
         return adminClient;
     }
 
@@ -71,5 +86,4 @@ public class KafkaUtil {
         }
         return createTopic;
     }
-
 }

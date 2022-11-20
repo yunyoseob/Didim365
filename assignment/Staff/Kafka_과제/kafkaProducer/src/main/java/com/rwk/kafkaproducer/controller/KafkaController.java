@@ -1,13 +1,10 @@
 package com.rwk.kafkaproducer.controller;
 
-import com.rwk.kafkaproducer.producer.KafkaProducer;
+import com.rwk.kafkaproducer.producer.RwkKafkaProducer;
 import com.rwk.kafkaproducer.util.KafkaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +14,9 @@ public class KafkaController {
     private final Logger logger = LoggerFactory.getLogger(KafkaController.class);
 
     private final KafkaUtil kafkaUtil;
-    private final KafkaProducer kafkaProducer;
+    private final RwkKafkaProducer kafkaProducer;
 
-    public KafkaController(KafkaUtil kafkaUtil, KafkaProducer kafkaProducer){
+    public KafkaController(KafkaUtil kafkaUtil, RwkKafkaProducer kafkaProducer){
         this.kafkaUtil=kafkaUtil;
         this.kafkaProducer=kafkaProducer;
     }
@@ -51,12 +48,16 @@ public class KafkaController {
         return resultMap;
     }
 
-    @PostMapping(value="/sendMessage")
-    public Boolean sendMessage(String msg){
-        logger.info("KafkaController :: sendMessage");
-        logger.info("message >>> : {}",msg);
+    @GetMapping(value="/sendMessage")
+    public Boolean sendMessage(@RequestParam Map<String, String> inputParamMap){
         Boolean sendSuccess=false;
-
+        logger.info("KafkaController :: sendMessage");
+        String topic=inputParamMap.get("topicNameToMessage");
+        String msg=inputParamMap.get("topicMessage");
+        logger.info("topic  >>> : {}",topic);
+        logger.info("msg >>> : {}", msg);
+        kafkaProducer.messageSend(topic, msg);
+        sendSuccess=true;
         return sendSuccess;
     }
 }

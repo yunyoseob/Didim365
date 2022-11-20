@@ -48,6 +48,7 @@
                     },
                     success: createTopicResult,
                 });
+
                 function createTopicResult(result) {
                     alert("토픽 생성 성공");
                 }
@@ -59,7 +60,7 @@
                     url: "/searchAll/topic",
                     type: "GET",
                     data: null,
-                    success: function(){
+                    success: function () {
                         alert("토픽 전체 조회 하기");
                     },
                 });
@@ -67,13 +68,19 @@
 
             // 메시지 전송
             $('#sendMessage').click(function () {
-                var data = $('#formSendMessage').val();
+                var topicNameToMessage=$('#topicNameToMessage').val();
+                var topicMessage=$('#topicMessage').val();
+                var data={
+                    topicNameToMessage:topicNameToMessage,
+                    topicMessage:topicMessage,
+                }
                 $.ajax({
                     url: "/sendMessage",
-                    type: "POST",
+                    type: "GET",
                     data: data,
                     success: sendMessageResult,
                 });
+
                 function sendMessageResult(result) {
                     alert("메시지를 성공적으로 전송했습니다.");
                 }
@@ -109,6 +116,7 @@
     </form>
 </div>
 <br>
+<!--
 <div class="divTopicList">
     <p> - Topic List</p>
     <table id="topicListTable">
@@ -121,14 +129,18 @@
     </table>
     <button id="topicListBtn">전체조회</button>
 </div>
+-->
 <br>
 <div class="divMessage" width="100%" height="30%">
-    - 메시지 작성하기 : <br>
     <form id="formSendMessage">
+        - 보낼 토픽 이름 :
+        &nbsp;
+        <input type="text" id="topicNameToMessage">
+        <br>
+        - 메시지 작성하기 : <br>
         <textarea id="topicMessage"></textarea>
         <br>
         <button id="sendMessage">전송</button>
-        <input type="hidden" id="topicNameToMessage">
     </form>
 </div>
 </body>
