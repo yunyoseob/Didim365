@@ -1,19 +1,19 @@
 package com.rwk.kafkaproducer.util;
 
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.TopicConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -56,31 +56,28 @@ public class KafkaUtil {
         return adminClient;
     }
 
-    public KafkaTemplate getKafkaTemplate() {
-        if (kafkaTemplate == null) {
-            HashMap<String, Object> configProps = new HashMap<>();
-            logger.info("KafkaUtil :: getKafkaTemplate() :: bootstrapServer >>> : {}",bootstrapServer);
-
-            configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
-            configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-            configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-
-            ProducerFactory<String, String> factory = new DefaultKafkaProducerFactory<>(configProps);
-
-            kafkaTemplate = new KafkaTemplate<>(factory);
-        }
-        return kafkaTemplate;
-    }
+    //public KafkaTemplate getKafkaTemplate() {
+    //    if (kafkaTemplate == null) {
+    //        HashMap<String, Object> configProps = new HashMap<>();
+    //        logger.info("KafkaUtil :: getKafkaTemplate() :: bootstrapServer >>> : {}", bootstrapServer);
+    //        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+    //        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    //        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    //        ProducerFactory<String, String> factory = new DefaultKafkaProducerFactory<>(configProps);
+    //        kafkaTemplate = new KafkaTemplate<>(factory);
+    //    }
+    //    return kafkaTemplate;
+    //}
 
     public Boolean createTopic(String topicName, Integer partitionNum, Short replicationNum, String retentionMs) {
         logger.info("KafkaUtil :: createTopic");
         logger.info("topicName : {}, partitionNnum : {}, replicationNum : {}, retentionMs : {}", topicName, partitionNum, replicationNum, retentionMs);
         Boolean createTopic = false;
 
-        Map<String, String> nweTopicConfig = new HashMap<>();
-        nweTopicConfig.put(TopicConfig.RETENTION_MS_CONFIG, retentionMs);
+        Map<String, String> newTopicConfig = new HashMap<>();
+        newTopicConfig.put(TopicConfig.RETENTION_MS_CONFIG, retentionMs);
         try {
-            final NewTopic newTopic = new NewTopic(topicName, partitionNum, replicationNum).configs(nweTopicConfig);
+            final NewTopic newTopic = new NewTopic(topicName, partitionNum, replicationNum).configs(newTopicConfig);
             final CreateTopicsResult createTopicsResult = getAdminClient().createTopics(Collections.singleton(newTopic));
             createTopicsResult.all().get();
             createTopic = true;

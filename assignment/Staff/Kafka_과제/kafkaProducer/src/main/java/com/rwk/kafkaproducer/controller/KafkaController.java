@@ -40,13 +40,12 @@ public class KafkaController {
         return result;
     }
 
-    @GetMapping(value="/searchAll/topic")
-    public Map<String, Object> getTopicList(){
-        logger.info("KafkaController :: getTopicList");
-        Map<String, Object> resultMap=new HashMap<>();
-
-        return resultMap;
-    }
+    //@GetMapping(value="/searchAll/topic")
+    //public Map<String, Object> getTopicList(){
+    //    logger.info("KafkaController :: getTopicList");
+    //    Map<String, Object> resultMap=new HashMap<>();
+    //    return resultMap;
+    //}
 
     @GetMapping(value="/sendMessage")
     public Boolean sendMessage(@RequestParam Map<String, String> inputParamMap){
@@ -56,8 +55,8 @@ public class KafkaController {
         String msg=inputParamMap.get("topicMessage");
         logger.info("topic  >>> : {}",topic);
         logger.info("msg >>> : {}", msg);
-        kafkaProducer.messageSend(topic, msg);
-        sendSuccess=true;
+
+        sendSuccess=kafkaProducer.messageSend(topic, msg);
         return sendSuccess;
     }
 }
