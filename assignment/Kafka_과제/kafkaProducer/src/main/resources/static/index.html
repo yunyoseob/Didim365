@@ -39,7 +39,7 @@
                 var retentionMs = $('#retentionMs').val();
                 $.ajax({
                     url: "/create/topic",
-                    type: "GET",
+                    type: "POST",
                     data: {
                         topicName: topicName,
                         partitionNum: partitionNum,
@@ -71,15 +71,15 @@
 
             // 메시지 전송
             $('#sendMessage').click(function () {
-                var topicNameToMessage=$('#topicNameToMessage').val();
-                var topicMessage=$('#topicMessage').val();
-                var data={
-                    topicNameToMessage:topicNameToMessage,
-                    topicMessage:topicMessage,
+                var topicNameToMessage = $('#topicNameToMessage').val();
+                var topicMessage = $('#topicMessage').val();
+                var data = {
+                    topicNameToMessage: topicNameToMessage,
+                    topicMessage: topicMessage,
                 }
                 $.ajax({
                     url: "/sendMessage",
-                    type: "GET",
+                    type: "POST",
                     data: data,
                     success: sendMessageResult,
                 });
@@ -89,13 +89,25 @@
                 }
             });
 
-            // 메시지 전송
-            // $('#sendMessage').click(function () {
-            //     var topicName=$('#topicNameToMessage').val();
-            //     var link="http://localhost:8080/read/message?topicName="+topicName;
-            //     alert(link);
-            //     location.href=link;
-            // });
+            // 메시지 읽기
+            $('#readMessage').click(function () {
+                var topicName = $('#topicNameToMessage').val();
+                var data = {
+                    topicName: topicName
+                }
+
+                $.ajax({
+                    url: "/read/messageResult",
+                    type: "POST",
+                    data: data,
+                    success: readMessageResult,
+                });
+
+                function readMessageResult(result) {
+                    alert("메시지를 성공적으로 불러왔습니다.");
+                    console.log("result >>> : " + JSON.stringify(result));
+                }
+            });
         });
     </script>
 </head>
@@ -147,6 +159,8 @@
         - 보낼 토픽 이름 :
         &nbsp;
         <input type="text" id="topicNameToMessage">
+        &nbsp;
+        <button id="readMessage">토픽 메시지 읽기</button>
         <br>
         - 메시지 작성하기 : <br>
         <textarea id="topicMessage"></textarea>

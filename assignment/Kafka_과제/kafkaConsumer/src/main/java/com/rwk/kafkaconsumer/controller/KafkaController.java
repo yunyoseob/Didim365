@@ -4,9 +4,10 @@ package com.rwk.kafkaconsumer.controller;
 import com.rwk.kafkaconsumer.consumer.RwkKafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class KafkaController {
@@ -18,15 +19,11 @@ public class KafkaController {
         this.rwkKafkaConsumer=rwkKafkaConsumer;
     }
 
-    @GetMapping(value = "/read/message")
-    public Boolean readMessage(@RequestParam String topicName){
-        logger.info("KafkaController :: readMessage >>> {}",topicName);
-        Boolean result=false;
-        rwkKafkaConsumer.onMessage(topicName);
+    @PostMapping(value = "/read/message")
+    public Map<String, Object> readMessage(){
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result",rwkKafkaConsumer.onMessage());
 
-        return result;
+        return resultMap;
     }
-
-
-
 }
