@@ -20,10 +20,10 @@ public class KafkaController {
     }
 
     @PostMapping(value = "/read/message")
-    public Map<String, Object> readMessage(){
+    public Map<String, Object> readMessage(String topicName){
+        logger.info("KafkaController :: readMessage :: topicName >>> : {}", topicName);
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("result",rwkKafkaConsumer.onMessage());
-
+        resultMap.put("result",rwkKafkaConsumer.onMessage(topicName));
         return resultMap;
     }
 }
