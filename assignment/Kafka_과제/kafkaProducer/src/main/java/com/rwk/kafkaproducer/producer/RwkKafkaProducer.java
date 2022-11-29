@@ -15,8 +15,8 @@ public class RwkKafkaProducer {
     private final Logger logger = LoggerFactory.getLogger(RwkKafkaProducer.class);
     private KafkaUtil kafkaUtil = null;
 
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServer;
+    // @Value("${spring.kafka.bootstrap-servers}")
+    // private String bootstrapServer;
 
     public RwkKafkaProducer(KafkaUtil kafkaUtil) {
         this.kafkaUtil = kafkaUtil;
@@ -26,7 +26,7 @@ public class RwkKafkaProducer {
         Boolean sendResult = false;
         // KafkaProduceer에 필요한 설정
         Properties configProp = new Properties();
-        configProp.setProperty("bootstrap.servers", bootstrapServer);
+        configProp.setProperty("bootstrap.servers", "192.168.112.130:9092");
         configProp.setProperty("key.serializer", "org.apache.kafka.common.serialization.IntegerSerializer");
         configProp.setProperty("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 

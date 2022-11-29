@@ -36,7 +36,7 @@
                 var topicName = $('#topicName').val();
                 var partitionNum = $('#partitionNum').val();
                 var replicationNum = $('#replicationNum').val();
-                var retentionMs = $('#retentionMs').val();
+                // var retentionMs = $('#retentionMs').val();
                 $.ajax({
                     url: "/create/topic",
                     type: "POST",
@@ -44,7 +44,6 @@
                         topicName: topicName,
                         partitionNum: partitionNum,
                         replicationNum: replicationNum,
-                        retentionMs: retentionMs
                     },
                     success: createTopicResult,
                 });
@@ -132,8 +131,8 @@
             &nbsp;&nbsp;
             <input type="number" id="replicationNum" , name="replicationNum" width="30px">
             &nbsp;&nbsp;
-            RetentionMs :
-            <input type="text" id="retentionMs" , name="retentionms" width="30px">
+            <!-- RetentionMs :
+            <input type="text" id="retentionMs" , name="retentionms" width="30px"> -->
             <button id="createTopicBtn">생성하기</button>
         </p>
     </form>

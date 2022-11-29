@@ -1,11 +1,12 @@
 package com.rwk.kafkaproducer.controller;
 
-import com.rwk.kafkaproducer.producer.RwkKafkaProducer;
 import com.rwk.kafkaproducer.util.KafkaUtil;
 import com.rwk.kafkaproducer.util.RestUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,12 +16,10 @@ public class KafkaController {
     private final Logger logger = LoggerFactory.getLogger(KafkaController.class);
 
     private final KafkaUtil kafkaUtil;
-    private final RwkKafkaProducer kafkaProducer;
     private final RestUtil restUtil;
 
-    public KafkaController(KafkaUtil kafkaUtil, RwkKafkaProducer kafkaProducer, RestUtil restUtil) {
+    public KafkaController(KafkaUtil kafkaUtil, RestUtil restUtil) {
         this.kafkaUtil = kafkaUtil;
-        this.kafkaProducer = kafkaProducer;
         this.restUtil = restUtil;
     }
 
@@ -32,14 +31,17 @@ public class KafkaController {
         Boolean result = false;
         String topicName = inputParamMap.get("topicName");
         Integer partitionNum = Integer.valueOf(inputParamMap.get("partitionNum"));
-        Short replicationNum = Short.valueOf(inputParamMap.get("replicationNum"));
-        String retentionMs = inputParamMap.get("retentionMs");
-        result = kafkaUtil.createTopic(topicName, partitionNum, replicationNum, retentionMs);
+        // Short replicationNum = Short.valueOf(inputParamMap.get("replicationNum"));
+        // String retentionMs = inputParamMap.get("retentionMs");
+        Short replicationNum = 1;
 
-        if (!result) {
-            logger.info("토픽 생성 실패");
+        result = kafkaUtil.createTopic(topicName, partitionNum, replicationNum);
+        try {
+            result = true;
+        } catch (Exception e) {
+            logger.info("KafkaController :: createTopic error >>> : {}", e.getMessage());
+            e.printStackTrace();
         }
-
         return result;
     }
 
@@ -52,7 +54,7 @@ public class KafkaController {
         logger.info("topic  >>> : {}", topic);
         logger.info("msg >>> : {}", msg);
 
-        sendSuccess = kafkaProducer.messageSend(topic, msg);
+        kafkaUtil.messageSend(topic, msg);
         return sendSuccess;
     }
 
@@ -62,7 +64,7 @@ public class KafkaController {
         logger.info("KafkaController :: readMessageResult >>> : {}", inputParamMap);
 
         try {
-            resultMap=(Map<String, Object>) restUtil.post("http://192.168.219.104:8089/read/message", inputParamMap, Object.class);
+            resultMap = (Map<String, Object>) restUtil.post("http://192.168.219.104:8089/read/message", inputParamMap, Object.class);
             // http://192.168.219.104:8089/
         } catch (Exception e) {
             logger.info("error >>> : {}", e.getMessage());
