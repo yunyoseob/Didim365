@@ -25,9 +25,9 @@ public class KafkaConsumerApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        String topicName = "testTopic";
+        String topicName = "kafkaTopic";
         logger.info("KafkaConsumerApplication :: run :: testTopic >>> {}", topicName);
-        kafkaController.readMessage();
+        kafkaController.readMessage(topicName);
     }
 
     //  public static void main(String[] args) {
