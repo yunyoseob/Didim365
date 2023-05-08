@@ -8,7 +8,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 public class DispatcherServletConfig {
     @Bean
     public DispatcherServlet dispatcherServlet(){
-        System.out.println("======== DispatcherServlet register =========");
         return new DispatcherServlet();
     }
 }

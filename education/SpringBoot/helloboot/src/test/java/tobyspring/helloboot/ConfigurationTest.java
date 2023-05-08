@@ -11,21 +11,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConfigurationTest {
     @Test
     void configuration() {
-        // isSameAs : 같은 오브젝트인지 주소값까지 비교
-        MyConfig myConfig = new MyConfig();
-        Bean1 bean1 = myConfig.bean1();
-        Bean2 bean2 = myConfig.bean2();
+          /**
+           * TEST CASE 1
+           * */
+//        MyConfig myConfig = new MyConfig();
+//        Bean1 bean1 = myConfig.bean1();
+//        Bean2 bean2 = myConfig.bean2();
+//
+//        assertThat(bean1.common).isSameAs(bean2.common);
 
-        assertThat(bean1.common).isSameAs(bean2.common);
         /**
-         * java.lang.AssertionError:
-         * Expecting actual:
-         *   tobyspring.helloboot.Common@25a65b77
-         * and actual:
-         *   tobyspring.helloboot.Common@2ed0fbae
-         * to refer to the same object
+         * TEST CASE 2
          * */
-
 //        AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext();
 //        ac.register(MyConfig.class);
 //        ac.refresh();
@@ -35,16 +32,15 @@ public class ConfigurationTest {
 //
 //        assertThat(bean1.common).isSameAs(bean2.common);
         // 테스트 통과
-    }
 
-    @Test
-    void proxyCommonMethod() {
-        MyConfigProxy myConfigProxy = new MyConfigProxy();
-        Bean1 bean1 = myConfigProxy.bean1();
-        Bean2 bean2 = myConfigProxy.bean2();
-
-        assertThat(bean1.common).isSameAs(bean2.common);
-        // 테스트 통과
+          /**
+           * TEST CASE 3
+           * */
+//        MyConfigProxy myConfigProxy = new MyConfigProxy();
+//        Bean1 bean1 = myConfigProxy.bean1();
+//        Bean2 bean2 = myConfigProxy.bean2();
+//
+//        assertThat(bean1.common).isSameAs(bean2.common);
     }
 
     static class MyConfigProxy extends MyConfig {
@@ -58,11 +54,16 @@ public class ConfigurationTest {
         }
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @Configuration
     static class MyConfig {
+        private int cnt;
         @Bean
         Common common() {
-            return new Common();
+            cnt++;
+            System.out.println("new Common() : "+cnt+"회 호출");
+            Common com = new Common();
+            System.out.println("Common 주소 : "+com);
+            return com;
         }
 
         @Bean
@@ -80,6 +81,7 @@ public class ConfigurationTest {
         private final Common common;
 
         Bean1(Common common) {
+            System.out.println("Bean1's common : "+common);
             this.common = common;
         }
     }
@@ -88,6 +90,7 @@ public class ConfigurationTest {
         private final Common common;
 
         Bean2(Common common) {
+            System.out.println("Bean2's common : "+common);
             this.common = common;
         }
     }

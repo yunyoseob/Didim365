@@ -1,5 +1,6 @@
 package tobyspring.helloboot;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 import tobyspring.config.AutoConfigImportSelector;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,5 +16,6 @@ import java.lang.annotation.Target;
 @Configuration
 @ComponentScan
 @Import(AutoConfigImportSelector.class)
+@AutoConfiguration
 public @interface RwkSpringBootAnnotation {
 }

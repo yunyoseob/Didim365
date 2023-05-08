@@ -1,5 +1,6 @@
 package tobyspring.config;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 import java.lang.annotation.ElementType;
