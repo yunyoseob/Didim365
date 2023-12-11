@@ -39,4 +39,6 @@
 
 4. Config
 
+### Kafka Connect 주요 구성요소 한 눈에 보기
 
+![Kafka Connect](image-2.png)
