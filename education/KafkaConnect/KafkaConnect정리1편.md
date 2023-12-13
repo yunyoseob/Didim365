@@ -179,7 +179,7 @@ DELETE: Connector 삭제
 
 **PORT 및 내부 토픽에 대한 설정은 $CONFLUENT/etc/kafka/connect-distributed.properties 파일에서 설정할 수 있다.**
 
-## connect-distributed.propertes 확인하기
+## connect-distributed.propertes 설정하기
 
 ```properties
 # ** Kafka Server의 IP:PORT **
