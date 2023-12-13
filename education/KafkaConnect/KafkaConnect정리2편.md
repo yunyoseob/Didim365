@@ -1,9 +1,12 @@
 # 카프카 완벽가이드 - 커넥트 편(2편)
 
+```
+카프카 완벽가이드 - 커넥트 편(2편)에서는 카프카 커넥트에서 Connector Instance(클래스)들을 로딩하고 호출하는 과정과 Source/Sink Connector를 통한 데이터 전송 과정에 대해 알아본다.
+```
+
 ## Connector의 유형
 
-
-![Alt text](image-4.png)
+![Alt text](./img/image-4.png)
 
 
 ### 1. Source Connector
