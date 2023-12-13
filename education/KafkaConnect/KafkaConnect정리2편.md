@@ -93,7 +93,7 @@ plugin.path=/home/min/connector_plugins
 }
 ```
 
-**2~3. Spooldir Source Connector lib 디렉토리를 spooldir_source으로 변경하여 plugin.path에 복사 디렉토리 이름 수정** 
+**2~3. Spooldir Source Connector lib 디렉토리를 spooldir_source으로 변경하여 plugin.path에 복사** 
 
 ```
 min@min-VirtualBox:~/connector_plugins$ ls -R
