@@ -216,3 +216,283 @@ csv-spooldir-source.csv
 ./csv-spooldir-source.csv:
 csv-spooldir-source.csv
 ```
+
+## JDBC Connector
+
+### JDBC(Source) Connector
+
+- JDBC Source Connector는 RDBMS별 JDBC Driver가 별도로 설치되어야 함. JDBC Source Connector는 JDBC Driver를 이용하여 DB 접속 및 데이터 추출을 수행 후 Producer를 이용하여 Kafka Broker로 데이터를 전송함
+
+- JDBC Source Connector는 Source 시스템에 **주기적으로 Query**를 날려서 변경된 데이터를 추출하는 방식
+
+![Alt text](./img/image-15.png)
+
+**JDBC Source Connector 모드 유형**
+
+- Incremental query 모드: 이전 데이터 추출 이후 새롭게 생성된 데이터나 업데이트된 데이터를 Kafka로 전송. 모드별로 대상 컬럼을 지정해 줘야 함.
+
+```
+- incrementing 모드: insert만 가능. Auto increment PK 컬럼 필요
+- timestamp 모드: Insert/Update 가능
+- timestamp+incrementing: Insert/Update 가능. 가장 안정적인 모드
+```
+
+- Bulk 모드: 특정 테이블에 있는 데이터를 한번에 모두 Kafka로 전송. 전송 이후 테이블의 데이터는 모두 삭제되어야 불필요한 재전송을 하지 않음.
+
+### JDBC Source Connector  실습
+
+실습 이전에 VM에 MySQL 설치 및 환경 구성이 선행되어야 함
+
+- [MySQL 설치 및 환경 구성하기](https://github.com/chulminkw/KafkaConnect/blob/main/%EC%8B%A4%EC%8A%B5%EC%88%98%ED%96%89/MySQL%20%EC%84%A4%EC%B9%98%20%EB%B0%8F%20%ED%99%98%EA%B2%BD%20%EA%B5%AC%EC%84%B1.md)
+
+**0. MySQL 환경 세팅 후, JDBC Source Connector에서 사용할 테이블 中  customers 생성 쿼리**
+
+```sql
+CREATE TABLE customers (
+customer_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+email_address varchar(255) NOT NULL,
+full_name varchar(255) NOT NULL,
+system_upd timestamp NOT NULL
+) ENGINE=InnoDB ;
+```
+
+
+**1. JDBC Source/Sink Connector Plugin을 Connect에 설치하기**
+
+- [JDBC Source/Sink Connector](https://www.confluent.io/hub/confluentinc/kafka-connect-jdbc) 로컬 PC에 Download
+
+
+**2. [MySQL JDBC Driver](https://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.30) 로컬 PC에 Download. 오라클 사이트나 maven에서 jar download**
+
+- 로컬 PC에 다운로드 받은 JDBC Connector와 MySQL JDBC Driver를 실습 vm로 옮김
+- upload된 JDBC Connector의 압축을 풀고 lib 디렉토리를 jdbc_connector로 이름 변경
+
+```sql
+unzip confluentinc-kafka-connect-jdbc-10.6.0.zip
+cd confluentinc-kafka-connect-jdbc-10.6.0
+mv lib jdbc_connector
+```
+
+**3. jdbc_connector 디렉토리를 plugin.path 디렉토리로 이동**
+
+```sql
+# ~/confluentinc-kafka-connect-jdbc-10.6.0 디렉토리에 아래 수행.
+cp -r jdbc_connector ~/connector_plugins
+```
+
+**4. mysql jdbc driver를 plugin.path 디렉토리로 이동**
+
+```sql
+cd ~/mysql-connector-java-8.0.29.jar ~/connector_plugins
+```
+
+**5. Connect를 재기동하고 REST API로 해당 plugin class가 제대로 Connect에 로딩 되었는지 확인**
+
+```sql
+# 아래 명령어는 반드시 Connect를 재 기동후 수행
+http http://localhost:8083/connector-plugins
+```
+
+**6. Connect 로딩 확인**
+
+![Alt text](./img/image-16.png)
+
+![Alt text](./img/image-17.png)
+
+**7. JDBC Source Connector 설정파일 생성 후, 확인**
+
+```sh
+min@min-VirtualBox:~/connector_configs$ pwd
+/home/min/connector_configs
+
+min@min-VirtualBox:~/connector_configs$ cat mysql_jdbc_om_source_00.json
+{
+    "name": "mysql_jdbc_om_source_00",
+    "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+        "tasks.max": "1",
+        "connection.url": "jdbc:mysql://localhost:3306/om",
+        "connection.user": "connect_dev",
+        "connection.password": "connect_dev",
+        "topic.prefix": "mysql_om_",
+        "topic.creation.default.replication.factor": 1,
+        "topic.creation.default.partitions": 1,
+        "catalog.pattern": "om",
+        "table.whitelist": "om.customers",
+        "poll.interval.ms": 10000,
+        "mode": "incrementing",
+        "incrementing.column.name": "customer_id"
+    }
+}
+```
+
+**8. incrementing mode용 JDBC Source Connector 생성 및 등록**
+
+```
+- connect_dev 사용자로 om 데이터베이스에 있는 customers 테이블에 데이터가 입력 될 경우 Kafka broker로 메시지를 보내는 Source Connector 생성하기
+
+- connector이름은 mysql_jdbc_om_source_00로 정하고 mode는 incrementing으로 설정.
+
+- vi ~/connector_configs/mysql_jdbc_om_source_00.json 파일을 생성하여 내용을 입력한 뒤, Connect에 REST API로 mysql_jdbc_om_source_00.json을 등록하여 JDBC Source Connector 신규 생성
+```
+
+![Alt text](./img/image-18.png)
+
+**9. JDBC Source Connector 테스트**
+
+- mysql
+
+```sql
+min@min-VirtualBox:~$ mysql -u connect_dev -p
+mysql> use om;
+mysql> insert into customers values (3, 'testaddress_01@testdomain', 'testuser_03', now());
+Query OK, 1 row affected (0.04 sec)
+```
+
+- kafka
+
+```sh
+min@min-VirtualBox:~/confluent/bin$ kafka-topics --bootstrap-server localhost:9092 --list
+__consumer_offsets
+connect-configs
+connect-offsets
+connect-status
+mysql_om_customers
+spooldir-test-topic
+
+min@min-VirtualBox:~/confluent/bin$ kafka-console-consumer --bootstrap-server localhost:9092 --topic mysql_om_customers --from-beginning --property print.key=true | jq '.'
+...
+{
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "type": "int32",
+        "optional": false,
+        "field": "customer_id"
+      },
+      {
+        "type": "string",
+        "optional": false,
+        "field": "email_address"
+      },
+      {
+        "type": "string",
+        "optional": false,
+        "field": "full_name"
+      },
+      {
+        "type": "int64",
+        "optional": false,
+        "name": "org.apache.kafka.connect.data.Timestamp",
+        "version": 1,
+        "field": "system_upd"
+      }
+    ],
+    "optional": false,
+    "name": "customers"
+  },
+  "payload": {
+    "customer_id": 3,
+    "email_address": "testaddress_01@testdomain",
+    "full_name": "testuser_03",
+    "system_upd": 1702861436000
+  }
+}
+```
+
+### JDBC(Sink) Connector
+
+- 카프카 토픽에서 메시지를 읽어들여서 타겟 DB로 데이터 입력/수정/삭제를 수행
+
+- Connect의 Consumer가 주기적으로 카프카 토픽 메시지를 읽어서 타겟 DB로 데이터 연동
+
+- RDBMS에서 데이터 추출은 JDBC Source Connector, CDC Source Connector 등을 사용하지만 RDBMS로 데이터 입력은 주로 JDBC Sink Connector를 사용
+
+![Alt text](./img/image-19.png)
+
+**JDBC Source Connector와 JDBC Sink Connector 연결 흐름**
+
+![Alt text](./img/image-20.png)
+
+### JDBC Sink Connector  실습
+
+**0. MySQL 환경 세팅 후, JDBC Sink Connector에서 사용할 테이블 中  customers_sink 생성 쿼리**
+
+```sql
+CREATE TABLE customers_sink (
+customer_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+email_address varchar(255) NOT NULL,
+full_name varchar(255) NOT NULL,
+system_upd timestamp NOT NULL
+) ENGINE=InnoDB ;
+```
+
+**1. JDBC Sink Connector Plug in 확인**
+
+```sh
+min@min-VirtualBox:~/connector_configs$ http GET http://localhost:8083/connector-plugins | jq '.[].class'
+
+"com.github.jcustenborder.kafka.connect.spooldir.SpoolDirAvroSourceConnector"
+"com.github.jcustenborder.kafka.connect.spooldir.SpoolDirBinaryFileSourceConnector"
+"com.github.jcustenborder.kafka.connect.spooldir.SpoolDirCsvSourceConnector"
+"com.github.jcustenborder.kafka.connect.spooldir.SpoolDirJsonSourceConnector"
+"com.github.jcustenborder.kafka.connect.spooldir.SpoolDirLineDelimitedSourceConnector"
+"com.github.jcustenborder.kafka.connect.spooldir.SpoolDirSchemaLessJsonSourceConnector"
+"com.github.jcustenborder.kafka.connect.spooldir.elf.SpoolDirELFSourceConnector"
+"io.confluent.connect.jdbc.JdbcSinkConnector"
+"io.confluent.connect.jdbc.JdbcSourceConnector"
+"org.apache.kafka.connect.mirror.MirrorCheckpointConnector"
+"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector"
+"org.apache.kafka.connect.mirror.MirrorSourceConnector"
+```
+
+**2. JDBC Sink Connector 설정파일 생성 후, 확인**
+
+- Mysql의 om 데이터베이스의 customers 테이블의 데이터를 om_sink 데이터베이스로 입력하는 JDBC Sink Connector 생성
+
+- 설정 파일인 mysql_jdbc_sink_customers.json을 생성(topics에 새로운 topic 명을 주면 그대로 새로운 topic을 생성함)
+
+```sh
+min@min-VirtualBox:~/connector_configs$ pwd
+/home/min/connector_configs
+
+min@min-VirtualBox:~/connector_configs$ cat mysql_jdbc_sink_customers.json
+
+{
+    "name": "mysql_jdbc_sink_customers",
+    "config": {
+        "connector.class":"io.confluent.connect.jdbc.JdbcSinkConnector",
+        "tasks.max": "1",
+        "topics": "mysql_jdbc_customers",
+        "connection.url": "jdbc:mysql://localhost:3306/om_sink",
+        "connection.user": "connect_dev",
+        "connection.password": "connect_dev",
+        
+        "insert.mode": "upsert",
+        "pk.mode": "record_key",
+        "pk.fields": "customer_id",
+        "delete.enabled": "true",
+
+        "table.name.format": "om_sink.customers_sink",
+        
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter"
+    }
+}
+```
+
+**3. JDBC Sink Connector 생성 및 등록**
+
+- 별도의 등록 쉘인 register_connector.sh 생성 후, 확인
+
+```sh
+min@min-VirtualBox:~$ cat register_connector.sh
+/usr/bin/http POST http://localhost:8083/connectors @/home/min/connector_configs/$1
+```
+
+- 설정 파일을 기반으로 Sink Connector 생성 및 등록하기
+
+```sh
+min@min-VirtualBox:~$ register_connector mysql_jdbc_sink_customers.json 
+```
