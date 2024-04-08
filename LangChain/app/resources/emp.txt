@@ -1,0 +1,27 @@
+Here is the description of the `EMP` table:
+
+1. **EMPNO**: Employee Number
+   - This is a unique identifier for each employee.
+
+2. **ENAME**: Employee Name
+   - Represents the name of the employee.
+
+3. **JOB**: Job Title
+   - Indicates the job position or role of the employee. Examples include MANAGER, ANALYST, CLERK, etc.
+
+4. **MGR**: Manager's Employee Number
+   - Represents the employee number of the manager for the respective employee. This establishes the hierarchical relationship between employees.
+
+5. **HIREDATE**: Hire Date
+   - Indicates the date when the employee joined the company.
+
+6. **SAL**: Salary
+   - Represents the salary of the employee.
+
+7. **COMM**: Commission
+   - Indicates any bonus or commission received by the employee. This may be applicable to some employees.
+
+8. **DEPTNO**: Department Number
+   - Identifies the department to which the employee belongs. This is linked to the DEPTNO in the DEPT table, which stores department information.
+
+The `EMP` table is used to effectively store and manage information about each employee in an organization. It allows for tasks such as understanding individual employee details, categorizing employees by department, and calculating salaries based on departmental divisions.

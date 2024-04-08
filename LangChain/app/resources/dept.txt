@@ -1,0 +1,12 @@
+Here is the description of the `DEPT` table:
+
+1. **DEPTNO**: Department Number
+   - This is a unique identifier for each department within the organization.
+
+2. **DNAME**: Department Name
+   - Represents the name of the department.
+
+3. **LOC**: Location
+   - Indicates the location or physical address of the department within the organization.
+
+The `DEPT` table is used to store information about the various departments within an organization. Each row in this table typically represents a different department, with details such as the department number (`DEPTNO`), the department name (`DNAME`), and the location (`LOC`) of the department. This table helps in organizing and categorizing different departments, allowing for efficient management of department-related information.

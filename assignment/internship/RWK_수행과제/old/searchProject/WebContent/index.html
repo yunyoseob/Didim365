@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>도로명주소 검색</title>
+<script src="/searchProject/js/check.js"></script>
+<script type="text/javascript">
+	function search(){
+		var currentPage=document.getElementById("currentPage").value;
+	    var countPerPage=document.getElementById("countPerPage").value;
+	    var keyword=document.getElementById("keyword").value;
+	    
+		var bool=check(currentPage,countPerPage, keyword);
+		alert("검색가능여부 >>> : "+bool);
+		
+		if(bool){
+		    var formData=window.document.formData;
+		    console.log("formData >>> : "+formData);
+		    
+		    formData.action="/searchProject/main";
+		    formData.method="GET";
+		    formData.enctype="application/x-www-form-urlencoded";
+		    formData.submit();
+		}else{
+			location.reload();
+		}
+	}
+</script>
+</head>
+<body>
+
+
+<form name="formData" id="formData">
+	<table>
+		<caption><b>도로명 주소 검색</b></caption>
+		<tr>
+			<td>현재 페이지 번호</td>
+			<td><input type="text" id="currentPage" name="currentPage" required></td>
+		</tr>
+		<tr>
+			<td>페이지당 출력 개수</td>
+			<td><input type="text" id="countPerPage" name="countPerPage" required></td>
+		</tr>
+		<tr>
+			<td>키워드</td>
+			<td><input type="text" id="keyword" name="keyword" required></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<button id="btn" onClick="search()">검색</button>
+			</td>
+		</tr>
+	</table>
+	<!-- 검색결과 형식  -->
+	<input type="hidden" id="resultType" name="resultType" value="json">
+	<!-- api 승인 키 : 사용기간 : 2022-08-10 ~ 2022-08-17 -->
+	<input type="hidden" id="confmKey" name="confmKey" value="devU01TX0FVVEgyMDIyMDgxMDExMDY0MjExMjg2NTU=">
+	<!-- api key : devU01TX0FVVEgyMDIyMDgxMDExMDY0MjExMjg2NTU= -->
+</form>
+</body>
+</html>
