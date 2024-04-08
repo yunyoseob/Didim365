@@ -14,23 +14,51 @@
 (참고2) [SQL Generation in Text2SQL with TinyLlama's LLM Fine-tuning (analyticsvidhya.com)](https://www.analyticsvidhya.com/blog/2024/02/sql-generation-in-text2sql-with-tinyllamas-llm-fine-tuning/)
 
 
-## LLM Chat Test
+## 1. [LLM Chat Test](http://localhost:7860/)
 
 ```
-http://localhost:7860/
+# /app에서 main.py 실행
+python .\main.py
 ```
 
+### 목표: EMP, DEPT 테이블에서 적절한 Query를 생성하는 것
+
+**✔️ 원하는 답변**
 
 ```
-- LLM: LLM 호출을 위한 공통 인터페이스
+Q. 사원들의 평균 연봉을 구해줘
 
-- 프롬프트 템플릿: 사용자 입력에 따른 프롬프트 생성
+A. SELECT AVG(SAL) FROM EMP;
 
-- 체인: 여러 LLM과 프롬프트의 입출력을 연결
+Q. 각 부서별로 부서이름과 부서의 평균 연봉을 구해줘
 
-- 에이전트: 사용자의 요청에 따라 어떤 기능을 어떤 순서로 실행할 것인지 결정
-
-- 도구: 에이전트가 수행하는 특정 기능
-
-- 메모리: 체인 및 에이전트의 메모리 보유
+A. SELECT D.DNAME, AVG(E.SAL) 
+     FROM EMP E
+    INNER JOIN DEPT D
+       ON E.DEPT_NO = D.DEPT_NO
+    GROUP BY D.DNAME
 ```
+
+### 1-1. RAG 사용하지 않고 순수 ChatOpenAI만 사용했을 때, 결과
+
+![alt text](./result/image.png)
+
+**✔️ log 확인해보기**
+
+```
+prompt question : 사원들의 평균 연봉을 구해줘
+prompt answer : SELECT AVG(salary) AS average_salary
+FROM employees;
+runtime: 0:00:01.646805 seconds
+
+prompt question : 각 부서별로 부서이름과 부서의 평균 연봉을 구해줘
+prompt answer : SELECT department_name, AVG(salary) AS average_salary
+FROM employees
+GROUP BY department_name;
+runtime: 0:00:01.147693 seconds
+```
+
+- 일반적인 테이블 조회 쿼리는 작성하는 것을 확인 할 수 있다.
+- 그러나, 원하는 테이블에서 조회하지는 못하는 것을 확인 할 수 있다.
+
+### 1-2. RAG 사용하여 질의 해보기
