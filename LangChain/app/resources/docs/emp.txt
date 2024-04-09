@@ -1,0 +1,48 @@
+Table Name: EMP
+Description:
+The "EMP" table stores information about employees within the organization. It contains records for each employee, capturing details such as employee number, name, job title, manager number, hire date, salary, commission, and department number. Each employee is uniquely identified by their employee number (EMPNO), and the table also maintains relationships with the "DEPT" table through the department number (DEPTNO) column.
+
+Column Descriptions:
+
+1. **EMPNO (Employee Number):**
+   - Data Type: NUMBER
+   - Description: Unique identifier for each employee.
+   - Constraints: NOT NULL, PRIMARY KEY
+
+2. **ENAME (Employee Name):**
+   - Data Type: VARCHAR2(100)
+   - Description: Name of the employee.
+
+3. **JOB (Job Title):**
+   - Data Type: VARCHAR2(50)
+   - Description: Job title or position of the employee.
+
+4. **MGR (Manager Number):**
+   - Data Type: NUMBER
+   - Description: Employee number of the manager for the respective employee.
+   - Constraints: FOREIGN KEY REFERENCES EMP(EMPNO)
+
+5. **HIREDATE (Hire Date):**
+   - Data Type: DATE
+   - Description: Date when the employee joined the company.
+
+6. **SAL (Salary):**
+   - Data Type: NUMBER(10, 2)
+   - Description: Salary of the employee.
+
+7. **COMM (Commission):**
+   - Data Type: NUMBER(10, 2)
+   - Description: Commission received by the employee.
+
+8. **DEPTNO (Department Number):**
+   - Data Type: NUMBER
+   - Description: Department number to which the employee belongs.
+   - Constraints: FOREIGN KEY REFERENCES DEPT(DEPTNO)
+
+**Table Relationships:**
+- The "EMP" table has a relationship with the "DEPT" table through DEPTNO, relating to department information.
+
+**Additional Information:**
+- This table includes not only basic employee information but also relates to departmental information.
+- Each employee has a unique EMPNO for identification purposes.
+- The department each employee belongs to can be identified through the department number (DEPTNO).

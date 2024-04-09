@@ -1,0 +1,25 @@
+Table Name: DEPT
+
+Table Description:
+The "DEPT" table contains information about departments within the organization.
+
+Column Descriptions:
+
+DEPTNO (Department Number):
+
+Data Type: NUMBER
+Description: Unique identifier for each department.
+Constraints: NOT NULL, PRIMARY KEY
+DNAME (Department Name):
+
+Data Type: VARCHAR2(100)
+Description: Name of the department.
+LOC (Location):
+
+Data Type: VARCHAR2(100)
+Description: Location of the department.
+Additional Information:
+
+Each department is uniquely identified by its DEPTNO.
+DNAME column stores the name of the department.
+LOC column indicates the location of the department.

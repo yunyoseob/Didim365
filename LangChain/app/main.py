@@ -11,7 +11,8 @@ load_dotenv()
 def response(message, history):
    # 소요시간 측정
    start = time.time()
-   result = template.response_chatllm(message)
+   # RAG 구성
+   result = template.response_rag_chatllm(message)
    end = time.time()
    sec = (end - start)
    print(f"runtime: {datetime.timedelta(seconds=sec)} seconds")
@@ -20,7 +21,7 @@ def response(message, history):
 chat = gr.ChatInterface(
    fn=response,
    theme="soft",
-   examples=["사원들의 평균 연봉을 구해줘", "각 부서별로 부서이름과 부서의 평균 연봉을 구해줘"],
+   examples=["Calculate the average salary of employees", "Calculate the department name and the average salary of each department.","Calculate the average price of cars"],
    title="Query Bot",
 )
 chat.launch()

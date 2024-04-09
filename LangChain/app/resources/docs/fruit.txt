@@ -1,0 +1,19 @@
+Table Name: Fruit
+
+1. **FruitID**: Fruit ID
+   - This is a unique identifier for each fruit.
+
+2. **Name**: Fruit Name
+   - Represents the name of the fruit.
+
+3. **Color**: Color
+   - Indicates the color of the fruit.
+
+4. **Taste**: Taste
+   - Describes the taste of the fruit.
+
+5. **Price**: Price
+   - Represents the price of the fruit.
+
+6. **Season**: Season
+   - Indicates the season in which the fruit is typically harvested.

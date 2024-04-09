@@ -1,0 +1,25 @@
+Table Name: Car
+
+1. **CarID**: Car ID
+   - This is a unique identifier for each car.
+
+2. **Brand**: Brand
+   - Represents the brand or manufacturer of the car.
+
+3. **Model**: Model
+   - Indicates the model name of the car.
+
+4. **Year**: Year
+   - Represents the manufacturing year of the car.
+
+5. **Color**: Color
+   - Indicates the color of the car.
+
+6. **Price**: Price
+   - Represents the price of the car.
+
+7. **Mileage**: Mileage
+   - Indicates the total mileage (distance traveled) of the car.
+
+8. **Transmission**: Transmission
+   - Indicates the type of transmission system used in the car (e.g., automatic, manual).

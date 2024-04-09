@@ -1,0 +1,17 @@
+The `EMP` table and the `DEPT` table are related through a common attribute known as the "Department Number" (`DEPTNO`). This relationship allows us to associate each employee (`EMP` table) with the department to which they belong (`DEPT` table). Here's a description of the relationship:
+
+- EMP Table:
+  - Each row in the `EMP` table represents an employee within the organization.
+  - The `DEPTNO` column in the `EMP` table stores the department number to which each employee belongs. This column serves as a foreign key that links to the `DEPTNO` column in the `DEPT` table.
+
+- DEPT Table:
+  - Each row in the `DEPT` table represents a department within the organization.
+  - The `DEPTNO` column in the `DEPT` table serves as the primary key, uniquely identifying each department.
+  - When we join the `EMP` table with the `DEPT` table, we use the `DEPTNO` column as the common attribute to establish the relationship.
+
+### Relationship Summary:
+- The `EMP` table and `DEPT` table are related through the `DEPTNO` column.
+- For each employee in the `EMP` table, there is a corresponding `DEPTNO` value that identifies the department to which the employee belongs.
+- By matching the `DEPTNO` values between the two tables, we can retrieve information about employees and their associated departments in a single query.
+  
+In SQL terms, the relationship between the `EMP` and `DEPT` tables can be established with a JOIN operation using the `DEPTNO` column as the common key. This allows us to retrieve information such as the department name (`DNAME`) from the `DEPT` table for each employee in the `EMP` table, or to calculate department-wise statistics based on employee data.
