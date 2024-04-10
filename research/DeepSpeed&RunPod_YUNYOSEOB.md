@@ -95,7 +95,7 @@ dl training optimization library on the software stack.
 
 ## 2-3. How to use DeepSpeed?
 
-[Colab 링크 참고](https://colab.research.google.com/drive/11YHeF72RDCqzZ2dN-w9T-viB4DQt7nCF?usp=sharing)
+[Colab 링크 참고](https://colab.research.google.com/drive/10bgmbTl0QYVghkl0kd_OKcxjqSCvjQUa?usp=sharing)
 
 ## 2-4. DeepSpeed Strength & Weakness
 
