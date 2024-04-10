@@ -36,7 +36,7 @@ def read_txt_files(directory):
     documents = text_splitter.split_documents(raw_documents)
 
     # Chroma DB
-    persist_directory='./LangChain/app/resources/chromadb'
+    persist_directory='./resources/chromadb'
 
     # Insert Vector DB
     vector_db = Chroma.from_documents(
