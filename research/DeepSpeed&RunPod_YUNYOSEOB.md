@@ -95,11 +95,7 @@ dl training optimization library on the software stack.
 
 ## 2-3. How to use DeepSpeed?
 
-**✔️ DeepSpeed 환경구성**
-
-
-
-
+[Colab 링크 참고](https://colab.research.google.com/drive/11YHeF72RDCqzZ2dN-w9T-viB4DQt7nCF?usp=sharing)
 
 ## 2-4. DeepSpeed Strength & Weakness
 
