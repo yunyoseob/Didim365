@@ -137,23 +137,80 @@ RunPod은 인공지능 추론과 훈련을 위한 전 세계적으로 분산된 
 
 ## 3-2. How to use RunPod
 
-**✔️ RunPod 환경구성**
+### 3-2-1. [RunPod 환경구성](https://www.runpod.io/console/deploy)
+
+Instance 구성 시, 시간 당 비용으로 선택하여 구성 할 수 있음.
+
+**✔️ Secure Cloud 시간당 비용**
+
+![alt text](./img/SecureCloud1.png)
+
+![alt text](./img/SecureCloud2.png)
+
+**✔️ Community Cloud 시간당 비용**
+
+![alt text](./img/CommunityCloud3.png)
+
+![alt text](./img/CommunityCloud1.png)
+
+![alt text](./img/CommunityCloud2.png)
 
 
-## 3-3. RunPod Strength & Weakness
+Secure Cloud가 Community Cloud에 비해 가격이 높게 측정 되어 있는 것을 확인 할 수 있다.
 
+구성하려고 할 때마다, 가능한 설정과 그렇지 않은 설정 옵션들이 표시된다.
 
-✔️ **Search Conclusion**
+**✔️ Data Center**
+
+Data Center의 경우, 캐나다, 유럽, 미국 중 선택할 수 있다.
+
+A100의 경우 현재 사용 불가라고해서 현재 가능한 옵션 중 선택하여 테스트 환경 구성
 
 ```
-2. 모델 연구 환경 구축에 있어서 서버를 직접 구축하지 않고도 훈련 및 추론, 배포가 가능한지? 가능하다면 가격은 어떻게 되는지? 직접 구축하는 것보다 싼지?
+GPU: NVIDIA RTX A6000
+
+GPU Count: 2
+
+Instance Pricing: On-Demand(Start Jupyter Notebook)
 ```
 
-➡️ 가능하다. 
+Pricing Summary
 
+```
+GPU Cost: $1.58 / hr
+Running Disk Cost: $0.006 / hr
+Exited Disk Cost: $0.006 / hr
+```
+
+Pod Summary
+
+```
+2x RTX A6000 (96 GB VRAM)
+50 GB RAM • 8 vCPU
+Total Disk: 40 GB
+```
+
+### 3-2-2. RunPod Connect
+
+Pod이 만들어지면 Connection Option을 통해 접속할 수 있음
+
+![alt text](./img/runpod_jupyter.png)
+
+## 3-3. RunPod Test
+
+![alt text](./img/runpod_deepspeed1.png)
+
+- Colab에서의 T4 GPU와는 다른 환경으로 구성된 것을 확인
+
+사용량이 아니라 시간당으로 계산하는 방식이라는 것과 Pod에 대한 메모리나 디스크 사용 등을 모니터링 할 수 있는 것이 장점
+
+그러나, 환경 세팅이 접속때마다 가능한 GPU가 있고 없고 달라진다는 단점도 있음
+
+```
+To Do ...
 # 4. 모델 학습 및 서빙 최적화 프로세스 구성 및 성능 벤치마킹
 
 ## 4-1. 모델 학습 및 서빙 최적화 프로세스 구성
 
-
 ## 4-2. 성능 벤치마킹
+```
