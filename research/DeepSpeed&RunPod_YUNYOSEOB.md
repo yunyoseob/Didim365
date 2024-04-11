@@ -70,6 +70,8 @@ dl training optimization library on the software stack.
 
 ![image](https://github.com/yunyoseob/yunyoseob/assets/81727895/982ee823-b9ff-4d29-8e16-770f7ce34c34)
 
+![image](./img/Blog_DeepSpeed3_MainHero_HighRes.jpg)
+
 1. Deep Speed는 리소스를 절약하고 훈련 능력과 효율성을 향상시키기 위해 압축된 훈련을 사용
 
 2. 예시로, Deep Speed Space Attention은 기존 트랜스포머와 비교하여 효율적인 Sparse Kernel을 지원 -> Sparse Kernel은 모델 인풋 시퀀스 길이를 10배까지 지원하고 6배 빠른 훈련을 제공
@@ -77,6 +79,8 @@ dl training optimization library on the software stack.
 3. Sparse Kernel은 유연한 스플래시 형식의 효율적인 실행을 지원하며 사용자들이 맞춤형 경로 구조 하에서 혁신할 수 있도록 돕는다.
 
 4. Progressive Layer Drop을 통해, 일부 레이어를 삭제하여 정확도에 지장없이 반복당 훈련 시간 비용을 줄임.
+
+- 참고 자료: [Microsoft Research Blog](https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone/?secret=iSlooB)
 
 ### 2-2-5. USABILITY
 
