@@ -97,10 +97,7 @@ dl training optimization library on the software stack.
 
 [Colab 링크 참고](https://colab.research.google.com/drive/10bgmbTl0QYVghkl0kd_OKcxjqSCvjQUa?usp=sharing)
 
-## 2-4. DeepSpeed Strength & Weakness
-
-
-## 2-5. 7Frameworks for Serving LLMs & LLM Inference Landscape
+## 2-4. 7Frameworks for Serving LLMs & LLM Inference Landscape
 
 **✔️ 7Frameworks for Serving LLMs**
 
@@ -164,12 +161,12 @@ Secure Cloud가 Community Cloud에 비해 가격이 높게 측정 되어 있는 
 
 Data Center의 경우, 캐나다, 유럽, 미국 중 선택할 수 있다.
 
-A100의 경우 현재 사용 불가라고해서 현재 가능한 옵션 중 선택하여 테스트 환경 구성
+**✔️ Environment Setting**
 
 ```
-GPU: NVIDIA RTX A6000
+GPU: NVIDIA 1 x A100 80GB
 
-GPU Count: 2
+GPU Count: 1
 
 Instance Pricing: On-Demand(Start Jupyter Notebook)
 ```
@@ -177,26 +174,18 @@ Instance Pricing: On-Demand(Start Jupyter Notebook)
 Pricing Summary
 
 ```
-GPU Cost: $1.58 / hr
-Running Disk Cost: $0.006 / hr
-Exited Disk Cost: $0.006 / hr
+GPU Cost: $1.89 / hr
 ```
 
-Pod Summary
-
-```
-2x RTX A6000 (96 GB VRAM)
-50 GB RAM • 8 vCPU
-Total Disk: 40 GB
-```
-
-### 3-2-2. RunPod Connect
+### 3-2-2. RunPod Connect & Test
 
 Pod이 만들어지면 Connection Option을 통해 접속할 수 있음
 
 ![alt text](./img/runpod_jupyter.png)
 
-## 3-3. RunPod Test
+**✔️[RunPod 실습: SQL Generation in Text2SQL with TinyLlama's LLM Fine-tuning (analyticsvidhya.com)](https://www.analyticsvidhya.com/blog/2024/02/sql-generation-in-text2sql-with-tinyllamas-llm-fine-tuning/)**
+
+[RunPod에서 실습했던 ipynb](https://colab.research.google.com/drive/1boAlK8EobsatJ95Rp-6UHp7m2iJq5QDX?usp=sharing)
 
 ![alt text](./img/runpod_deepspeed1.png)
 
