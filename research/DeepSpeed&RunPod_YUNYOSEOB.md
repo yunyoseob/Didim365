@@ -2,7 +2,7 @@
 
 - 발표자: 윤요섭
 
-- 발표일: 2024-04-11
+- 발표일: 2024-04-12
 
 # 1. Problem Definition
 
@@ -141,6 +141,75 @@ DeepSpeed-MII는 DeepSpeed로 부터 나온 새로운 오픈소스 파이썬 라
 내부 MII는 DeepSpeed-Inference로 구동
 ```
 
+### 2-4-1. Compare 7Frameworks for Serving LLMs 
+
+**✔ vLLM**
+
+HuggingFace Transformers보다 14~24배 더 높은 처리량을 달성
+
+HuggingFace Text Generation Inference(TGI)보다 2.2배 ~ 2.5배 더 높은 처리량 달성
+
+연속 일괄 처리로 인해 과도한 쿼리 부하에서도 잘 작동 할 수 있으며, Paged Attention으로 모델 가속화가 가능. 텍스트 생성 속도에서 가장 빠름
+
+사용자 정의 모델 추가 및 어댑터(LoRA, QLoRA 등) 지원 부족, 가중치 양자화의 부재 측면에서 아쉬움이 존재
+
+**✔ Text generation Inference**
+
+텍스트 생성 추론을 위한 Rust, Python, gRPC 서버
+
+내장된 Prometheus 지표로 서버 로드를 모니터링하고 성능에 대한 통찰력을 얻을 수 있음
+
+flash-attention 및 Paged Attention을 사용한 추론을 위해 Optimized transformers code ()
+
+Doocker를 사용하여 웹 서버를 실행하며, 모든 Dependency가 도커 위에서 설치 되고, HuggingFace 모델에 대한 기본 지원이 된다.
+
+어댑터를 사용하여 LLM을 배포할 수 있지만, 이에 대한 공식 지원이나 문서가 없다.
+
+소스(Rust+CUDA 커널)에서 컴파일해야 하는 필요성이 있고, 프로젝트의 README에서 기본 사항은 다루고 있지만, 문제나 소스 코드에서 추가 세부 정보는 검색해야 한다. (Rust 언어를 다루는데 어려움이 있다.)
+
+**✔ CTranslate2**
+
+CPU 및 GPU에서 빠르고 효율적인 실행이 되며, 동적 메모리 사용량으로 인해 메모리 사용량이 요청 크기에 따라 동적으로 변경
+
+다중 CPU 아키텍처를 지원하며, 병렬 및 비동기 실행, 프롬프트 캐싱, 디스크에서 경량화의 장점이 있다.
+
+내장된  REST 서버가 없다 (로깅 및 모니터링 기능 X)
+
+어댑터(LoRA, QLoRA 등)에 대한 지원 부족
+
+**✔ DeepSpeed-MII**
+
+짧은 지연 시간과 높은 처리량의 추론 가능
+
+여러 복제본에 대한 로드 밸런싱과, 업데이트가 대상 환경에 영구적으로 적용되지 않는 접근 방식으로 통제되고 표준화된 환경 구현 가능
+
+Hugging Face, FairSeq 등과 같은 여러 오픈 소스 모델 리포지토리를 통해 사용 가능하며, 지연 시간 정량화 및 비용 절갑이 가능하다.
+
+공식 릴리스 부족 및 제한된 수의 모델, 어댑터(LoRA, QLoRA 등) 지원이 부족하다.
+
+**✔ Open LLM**
+
+운영 환경에서 LLM을 운영하기 위한 개방형 플랫폼으로, 어댑터를 지원하고, Pytorch, Tensorflow와 같은 다양한 구현 사용
+
+HuggingFace에서 다양한 모델을 연결하고 LLM 및 자연어 관리 (HugginFace Agent)
+
+**✔ Ray Serve**
+
+온라인 추론 API를 구축하기 위한 확장 가능한 모델 제공 라이브러리, 딥러닝 모델의 모든 것을 제공
+
+대시보드 및 Prometheus 지표 모니터링 지원 및 여러 복제본에 걸쳐 자동 크기 조정, 동적 요청 일괄 처리가 가능하며
+
+기본 LangChain을 사용하여 원격 Ray Server와 상호작용 가능
+
+기본 제공 모델 최적화 부족(Ray Serve가 LLM에 중점을 두지 않으며 모든 ML 모델을 배포하기 위한 더 광범위한 프레임워크)
+
+높은 진입장벽의 문제
+
+**✔ MLC LLM**
+
+플랫폼 기반 런타임으로, 다양한 플랫폼용 모델을 컴파일 할 수 있음(ios, Android 용 등등)
+
+어댑터 지원은 없으며, 복잡한 설치가 단점
 
 **✔️ LLM Inference Landscape**
 
@@ -222,11 +291,16 @@ Pod이 만들어지면 Connection Option을 통해 접속할 수 있음
 
 그러나, 환경 세팅이 접속때마다 가능한 GPU가 있고 없고 달라진다는 단점도 있음
 
-```
-To Do ...
-# 4. 모델 학습 및 서빙 최적화 프로세스 구성 및 성능 벤치마킹
+
+# 4. To Do ...
+
+## 4-1. 모델 학습 및 서빙 최적화 프로세스 구성 및 성능 벤치마킹
+- DeepSpeed config 구성에 있어 옵션별 특징 정리
+- DeepSpeed를 활용했을 때, 추론 속도 측면에서 얼마나 효과가 있었는지 실험하기
+- Zero Paper를 통해 어떻게 속도를 높였고, 자원을 덜 사용할 수 있었는지 탐색하기
 
 ## 4-1. 모델 학습 및 서빙 최적화 프로세스 구성
+- 사용하고자 하는 모델을 통한 학습과 타 프레임워크와 비교하여 서빙에 최적화 되어있는지 체크
 
 ## 4-2. 성능 벤치마킹
-```
+- DeepSpeed를 사용하였을 때, 성능이 뛰어난지 등에 대한 실험
