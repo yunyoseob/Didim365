@@ -30,6 +30,12 @@
 dl training optimization library on the software stack. 
 ```
 
+모델을 여러 개로 쪼개서 여러 대의 GPU에 업로드 하는 기술을 '모델 병렬화'라고 하는데, 모델 병렬화 기술을 적용하면, 큰 모델도 여러 개의 작은 GPU로 처리할 수 있기 때문에 비용을 낮출 수 있고 속도는 개선할 수 있다.
+
+DeepSpeed는 대표적인 병렬처리 도구로 Megatron LM 기반의 모델 병렬화 기능과 커널 융합을 통한 추론 속도 개선 기능을 제공
+
+- 커널 융합: 여러 개의 GPU 연산을 하나로 합쳐서 연산의 속도를 크게 개선시키는 기술
+
 ## 2-2. Why DeepSpeed?
 
 - [참고자료: DeepSpeed | PyTorch Developer Day 2020](https://www.youtube.com/watch?v=ovQC7FqXHXk)
@@ -295,9 +301,12 @@ Pod이 만들어지면 Connection Option을 통해 접속할 수 있음
 # 4. To Do ...
 
 ## 4-1. 모델 학습 및 서빙 최적화 프로세스 구성 및 성능 벤치마킹
-- DeepSpeed config 구성에 있어 옵션별 특징 정리
+- [DeepSpeed config 구성에 있어 옵션별 특징 정리](https://yscho03.tistory.com/281)
+
 - DeepSpeed를 활용했을 때, 추론 속도 측면에서 얼마나 효과가 있었는지 실험하기
 - Zero Paper를 통해 어떻게 속도를 높였고, 자원을 덜 사용할 수 있었는지 탐색하기
+
+- [Parallelformers 블로그](https://tunib.tistory.com/entry/Parallelformers-%EB%B9%85%EB%AA%A8%EB%8D%B8-%EB%B0%B0%ED%8F%AC%EB%A5%BC-%ED%96%A5%ED%95%9C-%EC%97%AC%EC%A0%95%ED%8A%9C%EB%8B%99)에서 모델의 웹서버 배포 불가능 문제, 모델이 반드시 GPU에 업로드 되어 있는 상태에서 병렬화를 시작해야 하는 문제 체크
 
 ## 4-1. 모델 학습 및 서빙 최적화 프로세스 구성
 - 사용하고자 하는 모델을 통한 학습과 타 프레임워크와 비교하여 서빙에 최적화 되어있는지 체크
