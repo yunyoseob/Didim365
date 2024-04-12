@@ -103,27 +103,50 @@ dl training optimization library on the software stack.
 
 ## 2-4. 7Frameworks for Serving LLMs & LLM Inference Landscape
 
-**✔️ 7Frameworks for Serving LLMs**
+### 2-4-1. 7Frameworks for Serving LLMs Summary
 
 - 참고 자료: [7Frameworks for Serving LLMs](https://betterprogramming.pub/frameworks-for-serving-llms-60b7f7b23407)
 
 ![image](https://github.com/yunyoseob/yunyoseob/assets/81727895/e8e76a6f-a304-46a2-a6a6-718cbe70fb16)
+
+- 해당 표는 메모리 용량이 40GB인 단일 A100 GPU를 사용하였고, LLaMA-1 13b 모델로 사용하였음.
+
+- 해당 표에서는 TorchServe, KServe 또는 Triton Inference Server와 같은 딥러닝 모델을 제공하기 위한 기존 라이브러리를 다루지 않았음. (LLM과 함꼐 작동하도록 명시적으로 설계된 프레임워크에만 중점을 두었음)
+
+**Case Study**
+
+```
+1. batched prompt delivery에 있어서 최대 속도가 필요하다 -> vLLM
+
+2. HuggingFace support와 core model에 대한 다양한 어댑터를 필요로 하지 않는다 -> Text generation inference
+
+3. CPU에서 추론을 위한 스피드가 중요하다 ->  CTranlate2
+
+4. core model에 대한 어댑터가 필요하고 HuggingFace Agents를 활용한다 -> OpenLLM
+
+5. 안정적인 파이프라인과 유연한 배포 -> Ray Serve
+
+6. Android 혹은 iPhone 플랫폼에서 클라이언트 측에 LLM을 배포 -> MLC LLM
+
+7. DeepSpeed 라이브러리에 대한 경험이 이미 있고 이를 LLM 배포에 계속 사용하겠다 -> DeepSpeed MII
+```
+
+- [DeepSpeed MII](https://www.microsoft.com/en-us/research/project/deepspeed/deepspeed-mii/)
+
+![image](./img/deepspeed-mii.png)
+
+```
+DeepSpeed-MII는 DeepSpeed로 부터 나온 새로운 오픈소스 파이썬 라이브러리로 실행 가능하고 쉽게 액세스 할 수 있는 강력한 모델에 대한 낮은 대기 시간, 저렴한 비용 추론을 목표로 함.
+
+내부 MII는 DeepSpeed-Inference로 구동
+```
+
 
 **✔️ LLM Inference Landscape**
 
 - 참고 자료 : [Enabling Cost-Efficient LLM Serving with Ray Serve](https://www.youtube.com/watch?v=TJ5K1CO9Wbs)
 
 ![image](https://github.com/yunyoseob/yunyoseob/assets/81727895/77166077-db4d-4c95-ab93-4bf1b86c45d0)
-
-
-✔️ **Search Conclusion**
-
-```
-1. LLaMa 7B 모델을 학습 및 추론, 배포하는 과정에서 DeepSpeed를 통해 훈련에 들어가는 시간과 비용을 낮추고 리소스를 적게 사용하면서 사용할 수 있는지?
-```
-
-➡️ Latency만 본다면, 타 프레임워크에 비해 뛰어나다고 볼 수 있습니다. 그러나, 타 프레임워크에서는 지원하지만 DeepSpeed에서는 지원하지 않는 기능이 필요하지 않은 기능인지 필요하다면 어떻게 구현할 것인지 검토할 필요는 있어 보입니다.
-
 
 # 3. RunPod Search
 
