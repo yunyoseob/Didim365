@@ -1,0 +1,8 @@
+### prompt가 들어오면 RAG를 통해 AI 답변과 chunk id를 받아오는 요청
+POST http://localhost:8000/stream_chat HTTP/1.1
+Accept:text/event-stream
+
+{
+    "content" : "복지포인트 경조사비 장기근속 포상규정에 대해 알려줘"
+}
+
