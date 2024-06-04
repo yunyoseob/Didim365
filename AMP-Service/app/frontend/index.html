@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMP-Service</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* 정사각형 박스 스타일 */
+        .box {
+            width: calc(25% - 23px); /* 한 줄에 4개의 요소가 들어가도록 설정 */
+            height: 100px;
+            background-color: blue;
+            margin: 10px;
+            display: inline-block; /* 가로로 나열되도록 설정 */
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-sizing: border-box; /* 내부 여백과 테두리를 포함한 전체 요소의 크기를 설정 */
+            text-align: center; /* 텍스트를 가운데 정렬 */
+            line-height: 100px; /* 박스 내부에서 텍스트를 수직 가운데로 정렬 */
+        }
+        #container {
+        width: 80%; /* 부모 요소의 가로폭에 맞게 설정 */
+        white-space: nowrap; /* 요소들이 한 줄로 나오도록 설정 */
+        }
+
+        #search {
+            width: 80%; 
+        }
+    </style>
+    <script type="text/javascript">
+        function boxClicked(service_id){
+            // 서버 URL
+            var serverUrl = "http://127.0.0.1:8000/service?service_id=";
+
+            // AJAX 요청 보내기
+            $.ajax({
+                url: serverUrl + service_id, // 요청할 URL
+                method: "GET", // 요청 방식
+                success: function(response) { // 성공 시 실행될 함수
+                    console.log("response: ", response);        
+                    output_text = response["output_text"]
+                    document.getElementById('search').value = output_text
+                },
+                error: function(xhr, status, error) { // 실패 시 실행될 함수
+                    console.error("error: ", status, error);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>AMP-Service</h1>
+    <div id="container">
+        <div class="box" id="Domain" onclick="boxClicked('Domain')">사내규정</div>
+        <div class="box" id="Tech" onclick="boxClicked('Tech')">기술문서</div>
+        <div class="box" id="AIMSP" onclick="boxClicked('AIMSP')">AIMSP</div>
+        <div class="box" id="운영규정" onclick="boxClicked('PROD_RULE')">운영규정</div>
+    </div>
+    <br>
+    <form action="http://localhost:8080/send-message/" method="get">
+        <input type="text" id="search" name="search" value="무엇이든 물어보세요.">
+        <input type="button" value="Search">
+        <input type="button" value="Setting">
+    </form>
+</body>
+</html>
