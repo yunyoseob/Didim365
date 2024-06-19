@@ -1,0 +1,7 @@
+scrapy:
+  tool:
+    web:
+      interval_seconds: 10
+      search_keywords: "오늘의 핫 이슈는 무엇인가요?"
+    #api:
+    #  interval_seconds: 2
